@@ -1,0 +1,11 @@
+/Users/breaker/SourceCode/Scratch/DH.Events/bin/Debug/net10.0/DH.Events.deps.json
+/Users/breaker/SourceCode/Scratch/DH.Events/bin/Debug/net10.0/DH.Events.dll
+/Users/breaker/SourceCode/Scratch/DH.Events/bin/Debug/net10.0/DH.Events.pdb
+/Users/breaker/SourceCode/Scratch/DH.Events/obj/Debug/net10.0/DH.Events.GeneratedMSBuildEditorConfig.editorconfig
+/Users/breaker/SourceCode/Scratch/DH.Events/obj/Debug/net10.0/DH.Events.AssemblyInfoInputs.cache
+/Users/breaker/SourceCode/Scratch/DH.Events/obj/Debug/net10.0/DH.Events.AssemblyInfo.cs
+/Users/breaker/SourceCode/Scratch/DH.Events/obj/Debug/net10.0/DH.Events.csproj.CoreCompileInputs.cache
+/Users/breaker/SourceCode/Scratch/DH.Events/obj/Debug/net10.0/DH.Events.dll
+/Users/breaker/SourceCode/Scratch/DH.Events/obj/Debug/net10.0/refint/DH.Events.dll
+/Users/breaker/SourceCode/Scratch/DH.Events/obj/Debug/net10.0/DH.Events.pdb
+/Users/breaker/SourceCode/Scratch/DH.Events/obj/Debug/net10.0/ref/DH.Events.dll

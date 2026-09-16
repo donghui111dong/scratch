@@ -1,0 +1,9 @@
+/Users/breaker/SourceCode/Scratch/DH.Events/bin/Release/net8.0/osx-x64/DH.Events.deps.json
+/Users/breaker/SourceCode/Scratch/DH.Events/bin/Release/net8.0/osx-x64/DH.Events.dll
+/Users/breaker/SourceCode/Scratch/DH.Events/obj/Release/net8.0/osx-x64/DH.Events.GeneratedMSBuildEditorConfig.editorconfig
+/Users/breaker/SourceCode/Scratch/DH.Events/obj/Release/net8.0/osx-x64/DH.Events.AssemblyInfoInputs.cache
+/Users/breaker/SourceCode/Scratch/DH.Events/obj/Release/net8.0/osx-x64/DH.Events.AssemblyInfo.cs
+/Users/breaker/SourceCode/Scratch/DH.Events/obj/Release/net8.0/osx-x64/DH.Events.csproj.CoreCompileInputs.cache
+/Users/breaker/SourceCode/Scratch/DH.Events/obj/Release/net8.0/osx-x64/DH.Events.dll
+/Users/breaker/SourceCode/Scratch/DH.Events/obj/Release/net8.0/osx-x64/refint/DH.Events.dll
+/Users/breaker/SourceCode/Scratch/DH.Events/obj/Release/net8.0/osx-x64/ref/DH.Events.dll

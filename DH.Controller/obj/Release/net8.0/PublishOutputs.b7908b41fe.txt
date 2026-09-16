@@ -1,0 +1,9 @@
+/Users/breaker/SourceCode/Scratch/DH.Controller/bin/Release/net8.0/publish/DH.Controller.dll
+/Users/breaker/SourceCode/Scratch/DH.Controller/bin/Release/net8.0/publish/DH.Controller.deps.json
+/Users/breaker/SourceCode/Scratch/DH.Controller/bin/Release/net8.0/publish/DH.Controller.pdb
+/Users/breaker/SourceCode/Scratch/DH.Controller/bin/Release/net8.0/publish/DH.Entity.dll
+/Users/breaker/SourceCode/Scratch/DH.Controller/bin/Release/net8.0/publish/DH.Events.dll
+/Users/breaker/SourceCode/Scratch/DH.Controller/bin/Release/net8.0/publish/DH.Tools.dll
+/Users/breaker/SourceCode/Scratch/DH.Controller/bin/Release/net8.0/publish/DH.Events.pdb
+/Users/breaker/SourceCode/Scratch/DH.Controller/bin/Release/net8.0/publish/DH.Entity.pdb
+/Users/breaker/SourceCode/Scratch/DH.Controller/bin/Release/net8.0/publish/DH.Tools.pdb

@@ -1,0 +1,12 @@
+/Users/breaker/SourceCode/Scratch/DH.Tools/bin/Debug/net10.0/DH.Tools.deps.json
+/Users/breaker/SourceCode/Scratch/DH.Tools/bin/Debug/net10.0/DH.Tools.dll
+/Users/breaker/SourceCode/Scratch/DH.Tools/bin/Debug/net10.0/DH.Tools.pdb
+/Users/breaker/SourceCode/Scratch/DH.Tools/obj/Debug/net10.0/DH.Tools.csproj.AssemblyReference.cache
+/Users/breaker/SourceCode/Scratch/DH.Tools/obj/Debug/net10.0/DH.Tools.GeneratedMSBuildEditorConfig.editorconfig
+/Users/breaker/SourceCode/Scratch/DH.Tools/obj/Debug/net10.0/DH.Tools.AssemblyInfoInputs.cache
+/Users/breaker/SourceCode/Scratch/DH.Tools/obj/Debug/net10.0/DH.Tools.AssemblyInfo.cs
+/Users/breaker/SourceCode/Scratch/DH.Tools/obj/Debug/net10.0/DH.Tools.csproj.CoreCompileInputs.cache
+/Users/breaker/SourceCode/Scratch/DH.Tools/obj/Debug/net10.0/DH.Tools.dll
+/Users/breaker/SourceCode/Scratch/DH.Tools/obj/Debug/net10.0/refint/DH.Tools.dll
+/Users/breaker/SourceCode/Scratch/DH.Tools/obj/Debug/net10.0/DH.Tools.pdb
+/Users/breaker/SourceCode/Scratch/DH.Tools/obj/Debug/net10.0/ref/DH.Tools.dll

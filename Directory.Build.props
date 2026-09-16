@@ -1,0 +1,33 @@
+<Project>
+    <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Company>DH</Company>
+    <InformationalVersion>1.0.0</InformationalVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <plateformtarget>AnyCPU</plateformtarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>portable</DebugType>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <plateformtarget>AnyCPU</plateformtarget>
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <PublishSingleFile>true</PublishSingleFile>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <PublishTrimmed>true</PublishTrimmed>
+    <PublishSymbols>false</PublishSymbols>
+    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+    <!-- 
+        windows:  win-x64,win-x86,win-arm64
+        linux:    linux-x64,linux-musl-x64,linux-musl-arm64,linux-arm,linux-arm64,linux-bionic-arm64,linux-loongarch64
+        macOS:    osx-x64,osx-arm64
+        IOS:      ios-arm64,ios-arm,iossimulator-x64,iossimulator-arm64
+        Android:  android-arm,android-arm64,android-x86,android-x64
+    -->
+  </PropertyGroup>
+</Project>

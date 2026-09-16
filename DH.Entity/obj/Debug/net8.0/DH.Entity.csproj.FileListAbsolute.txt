@@ -1,0 +1,11 @@
+/Users/breaker/SourceCode/Scratch/DH.Entity/bin/Debug/net8.0/DH.Entity.deps.json
+/Users/breaker/SourceCode/Scratch/DH.Entity/bin/Debug/net8.0/DH.Entity.dll
+/Users/breaker/SourceCode/Scratch/DH.Entity/bin/Debug/net8.0/DH.Entity.pdb
+/Users/breaker/SourceCode/Scratch/DH.Entity/obj/Debug/net8.0/DH.Entity.GeneratedMSBuildEditorConfig.editorconfig
+/Users/breaker/SourceCode/Scratch/DH.Entity/obj/Debug/net8.0/DH.Entity.AssemblyInfoInputs.cache
+/Users/breaker/SourceCode/Scratch/DH.Entity/obj/Debug/net8.0/DH.Entity.AssemblyInfo.cs
+/Users/breaker/SourceCode/Scratch/DH.Entity/obj/Debug/net8.0/DH.Entity.csproj.CoreCompileInputs.cache
+/Users/breaker/SourceCode/Scratch/DH.Entity/obj/Debug/net8.0/DH.Entity.dll
+/Users/breaker/SourceCode/Scratch/DH.Entity/obj/Debug/net8.0/refint/DH.Entity.dll
+/Users/breaker/SourceCode/Scratch/DH.Entity/obj/Debug/net8.0/DH.Entity.pdb
+/Users/breaker/SourceCode/Scratch/DH.Entity/obj/Debug/net8.0/ref/DH.Entity.dll

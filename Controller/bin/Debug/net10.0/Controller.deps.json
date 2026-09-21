@@ -12,6 +12,7 @@
           "DH.Entity": "1.0.0",
           "DH.Events": "1.0.0",
           "DH.Tools": "1.0.0",
+          "IdGen": "3.0.7",
           "Microsoft.Extensions.Hosting": "10.0.12",
           "Microsoft.Extensions.Hosting.Systemd": "10.0.12",
           "Microsoft.Extensions.Hosting.WindowsServices": "10.0.12",
@@ -23,6 +24,14 @@
         },
         "runtime": {
           "Controller.dll": {}
+        }
+      },
+      "IdGen/3.0.7": {
+        "runtime": {
+          "lib/netstandard2.0/IdGen.dll": {
+            "assemblyVersion": "3.0.7.0",
+            "fileVersion": "3.0.7.0"
+          }
         }
       },
       "Microsoft.Extensions.Configuration/10.0.12": {
@@ -580,6 +589,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "IdGen/3.0.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-pynYNXHCteidWueEX8mT72+Ue9FfwyMe+cx2YNJVrRWYGrfVLqdC0Xjv9IwuAkUQ8usV5JKwUPFJFh5eVi/XMg==",
+      "path": "idgen/3.0.7",
+      "hashPath": "idgen.3.0.7.nupkg.sha512"
     },
     "Microsoft.Extensions.Configuration/10.0.12": {
       "type": "package",

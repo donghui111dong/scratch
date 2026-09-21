@@ -6,6 +6,7 @@
 /Users/breaker/SourceCode/Scratch/DH.Tools/obj/Debug/net10.0/DH.Tools.AssemblyInfoInputs.cache
 /Users/breaker/SourceCode/Scratch/DH.Tools/obj/Debug/net10.0/DH.Tools.AssemblyInfo.cs
 /Users/breaker/SourceCode/Scratch/DH.Tools/obj/Debug/net10.0/DH.Tools.csproj.CoreCompileInputs.cache
+/Users/breaker/SourceCode/Scratch/DH.Tools/obj/Debug/net10.0/DH.Tools.sourcelink.json
 /Users/breaker/SourceCode/Scratch/DH.Tools/obj/Debug/net10.0/DH.Tools.dll
 /Users/breaker/SourceCode/Scratch/DH.Tools/obj/Debug/net10.0/refint/DH.Tools.dll
 /Users/breaker/SourceCode/Scratch/DH.Tools/obj/Debug/net10.0/DH.Tools.pdb

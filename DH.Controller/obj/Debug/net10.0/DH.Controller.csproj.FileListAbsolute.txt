@@ -12,6 +12,7 @@
 /Users/breaker/SourceCode/Scratch/DH.Controller/obj/Debug/net10.0/DH.Controller.AssemblyInfoInputs.cache
 /Users/breaker/SourceCode/Scratch/DH.Controller/obj/Debug/net10.0/DH.Controller.AssemblyInfo.cs
 /Users/breaker/SourceCode/Scratch/DH.Controller/obj/Debug/net10.0/DH.Controller.csproj.CoreCompileInputs.cache
+/Users/breaker/SourceCode/Scratch/DH.Controller/obj/Debug/net10.0/DH.Controller.sourcelink.json
 /Users/breaker/SourceCode/Scratch/DH.Controller/obj/Debug/net10.0/DH.Contr.C0CF3569.Up2Date
 /Users/breaker/SourceCode/Scratch/DH.Controller/obj/Debug/net10.0/DH.Controller.dll
 /Users/breaker/SourceCode/Scratch/DH.Controller/obj/Debug/net10.0/refint/DH.Controller.dll

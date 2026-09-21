@@ -5,6 +5,7 @@
 /Users/breaker/SourceCode/Scratch/DH.Entity/obj/Debug/net10.0/DH.Entity.AssemblyInfoInputs.cache
 /Users/breaker/SourceCode/Scratch/DH.Entity/obj/Debug/net10.0/DH.Entity.AssemblyInfo.cs
 /Users/breaker/SourceCode/Scratch/DH.Entity/obj/Debug/net10.0/DH.Entity.csproj.CoreCompileInputs.cache
+/Users/breaker/SourceCode/Scratch/DH.Entity/obj/Debug/net10.0/DH.Entity.sourcelink.json
 /Users/breaker/SourceCode/Scratch/DH.Entity/obj/Debug/net10.0/DH.Entity.dll
 /Users/breaker/SourceCode/Scratch/DH.Entity/obj/Debug/net10.0/refint/DH.Entity.dll
 /Users/breaker/SourceCode/Scratch/DH.Entity/obj/Debug/net10.0/DH.Entity.pdb

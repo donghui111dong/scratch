@@ -40,7 +40,7 @@ namespace Controller
             #region 参数设置
 
             ConParPath = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-            ? $"D:{Path.DirectorySeparatorChar}{Path.Combine("tycho", "scratch", "parameterfiles", "con.json")}"
+            ? $"D:{Path.DirectorySeparatorChar}{Path.Combine("tycho", "scratch", "parameterfiles", "control.json")}"
             : $"{Path.DirectorySeparatorChar}{Path.Combine("etc", "scratchpar", "con.json")}";
 
             IConfigurationBuilder IConfig = Builder
@@ -86,7 +86,7 @@ namespace Controller
                         fileSizeLimitBytes: long.MaxValue,
                         rollingInterval: RollingInterval.Day,
                         retainedFileTimeLimit: TimeSpan.FromDays(365),
-                        flushToDiskInterval: TimeSpan.FromMilliseconds(1),
+                        flushToDiskInterval: RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? TimeSpan.FromMilliseconds(1) : TimeSpan.FromMilliseconds(60),
                         path: RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
                                                               ? $"D:{Path.DirectorySeparatorChar}{Path.Combine("Tycho", "Scratch", "MonitorLog", ".log")}"
                                                               : $"{Path.DirectorySeparatorChar}{Path.Combine("var", "log", "scratch", "monitorlog", ".log")}",

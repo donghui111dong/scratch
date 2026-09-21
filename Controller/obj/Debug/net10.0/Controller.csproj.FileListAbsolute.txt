@@ -5,6 +5,7 @@
 /Users/breaker/SourceCode/Scratch/Controller/bin/Debug/net10.0/Controller.runtimeconfig.json
 /Users/breaker/SourceCode/Scratch/Controller/bin/Debug/net10.0/Controller.dll
 /Users/breaker/SourceCode/Scratch/Controller/bin/Debug/net10.0/Controller.pdb
+/Users/breaker/SourceCode/Scratch/Controller/bin/Debug/net10.0/IdGen.dll
 /Users/breaker/SourceCode/Scratch/Controller/bin/Debug/net10.0/Microsoft.Extensions.Configuration.dll
 /Users/breaker/SourceCode/Scratch/Controller/bin/Debug/net10.0/Microsoft.Extensions.Configuration.Abstractions.dll
 /Users/breaker/SourceCode/Scratch/Controller/bin/Debug/net10.0/Microsoft.Extensions.Configuration.Binder.dll
@@ -59,6 +60,7 @@
 /Users/breaker/SourceCode/Scratch/Controller/obj/Debug/net10.0/Controller.AssemblyInfoInputs.cache
 /Users/breaker/SourceCode/Scratch/Controller/obj/Debug/net10.0/Controller.AssemblyInfo.cs
 /Users/breaker/SourceCode/Scratch/Controller/obj/Debug/net10.0/Controller.csproj.CoreCompileInputs.cache
+/Users/breaker/SourceCode/Scratch/Controller/obj/Debug/net10.0/Controller.sourcelink.json
 /Users/breaker/SourceCode/Scratch/Controller/obj/Debug/net10.0/Controller.csproj.Up2Date
 /Users/breaker/SourceCode/Scratch/Controller/obj/Debug/net10.0/Controller.dll
 /Users/breaker/SourceCode/Scratch/Controller/obj/Debug/net10.0/refint/Controller.dll

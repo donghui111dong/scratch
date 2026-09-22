@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Company>DH</Company>
     <InformationalVersion>1.0.0</InformationalVersion>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <plateformtarget>AnyCPU</plateformtarget>

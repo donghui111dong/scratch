@@ -1,12 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "maJ8SBm8tek=",
+  "dgSpecHash": "1Fbiq8IK2Yc=",
   "success": true,
   "projectFilePath": "/Users/breaker/SourceCode/Scratch/DH.Entity/DH.Entity.csproj",
-  "expectedPackageFiles": [
-    "/Users/breaker/.nuget/packages/microsoft.net.illink.tasks/10.0.9/microsoft.net.illink.tasks.10.0.9.nupkg.sha512",
-    "/Users/breaker/.nuget/packages/microsoft.netcore.app.runtime.linux-x64/10.0.9/microsoft.netcore.app.runtime.linux-x64.10.0.9.nupkg.sha512",
-    "/Users/breaker/.nuget/packages/microsoft.aspnetcore.app.runtime.linux-x64/10.0.9/microsoft.aspnetcore.app.runtime.linux-x64.10.0.9.nupkg.sha512"
-  ],
+  "expectedPackageFiles": [],
   "logs": []
 }

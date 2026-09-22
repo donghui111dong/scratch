@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.Versioning;
+using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 
 namespace DH.Tools;

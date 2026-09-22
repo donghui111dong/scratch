@@ -1,0 +1,14 @@
+/Users/breaker/SourceCode/Scratch/DH.Controller/bin/Release/net10.0/win-x64/DH.Controller.deps.json
+/Users/breaker/SourceCode/Scratch/DH.Controller/bin/Release/net10.0/win-x64/DH.Controller.dll
+/Users/breaker/SourceCode/Scratch/DH.Controller/bin/Release/net10.0/win-x64/DH.Entity.dll
+/Users/breaker/SourceCode/Scratch/DH.Controller/bin/Release/net10.0/win-x64/DH.Events.dll
+/Users/breaker/SourceCode/Scratch/DH.Controller/bin/Release/net10.0/win-x64/DH.Tools.dll
+/Users/breaker/SourceCode/Scratch/DH.Controller/obj/Release/net10.0/win-x64/DH.Controller.csproj.AssemblyReference.cache
+/Users/breaker/SourceCode/Scratch/DH.Controller/obj/Release/net10.0/win-x64/DH.Controller.GeneratedMSBuildEditorConfig.editorconfig
+/Users/breaker/SourceCode/Scratch/DH.Controller/obj/Release/net10.0/win-x64/DH.Controller.AssemblyInfoInputs.cache
+/Users/breaker/SourceCode/Scratch/DH.Controller/obj/Release/net10.0/win-x64/DH.Controller.AssemblyInfo.cs
+/Users/breaker/SourceCode/Scratch/DH.Controller/obj/Release/net10.0/win-x64/DH.Controller.csproj.CoreCompileInputs.cache
+/Users/breaker/SourceCode/Scratch/DH.Controller/obj/Release/net10.0/win-x64/DH.Contr.C0CF3569.Up2Date
+/Users/breaker/SourceCode/Scratch/DH.Controller/obj/Release/net10.0/win-x64/DH.Controller.dll
+/Users/breaker/SourceCode/Scratch/DH.Controller/obj/Release/net10.0/win-x64/refint/DH.Controller.dll
+/Users/breaker/SourceCode/Scratch/DH.Controller/obj/Release/net10.0/win-x64/ref/DH.Controller.dll

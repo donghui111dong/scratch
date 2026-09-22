@@ -1,0 +1,3 @@
+/Users/breaker/SourceCode/Scratch/Controller/bin/Release/net10.0/win-x64/publish/appsettings.Development.json
+/Users/breaker/SourceCode/Scratch/Controller/bin/Release/net10.0/win-x64/publish/appsettings.json
+/Users/breaker/SourceCode/Scratch/Controller/bin/Release/net10.0/win-x64/publish/Controller.exe

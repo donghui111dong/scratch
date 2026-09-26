@@ -1,9 +1,4 @@
-using Serilog;
-using Serilog.Events;
-using Serilog.Formatting;
-using Serilog.Formatting.Display;
-
-namespace Controller;
+namespace Controller.ExLogComp;
 
 public class LogTextFormatter(string DefaultTemp,
                               string SpecialTemp,

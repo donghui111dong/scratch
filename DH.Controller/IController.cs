@@ -1,6 +1,3 @@
-using System.Threading;
-using DH.Entity;
-
 namespace DH.Controller;
 
 public interface IController

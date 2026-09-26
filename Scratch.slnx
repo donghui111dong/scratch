@@ -5,5 +5,5 @@
   <Project Path="DH.Events/DH.Events.csproj" />
   <Project Path="DH.Tools/DH.Tools.csproj" />
   <Folder Name="/Analysis/" />
-  <Folder Name="/Kestrel/" />
+  <Folder Name="/ParTools/" />
 </Solution>

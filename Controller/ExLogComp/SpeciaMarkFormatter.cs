@@ -1,8 +1,4 @@
-using System.Text;
-using Serilog.Events;
-using Serilog.Formatting;
-
-namespace Controller;
+namespace Controller.ExLogComp;
 
 public class SpeciaMarkFormatter(ITextFormatter TextFormatter,
                                  string RemoveStr,

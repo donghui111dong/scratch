@@ -1,5 +1,11 @@
 namespace Controller.ExLogComp;
 
+/// <summary>
+/// dong hui
+/// 2026-09-27 12:39
+/// 初版
+/// 扩展日志滤除器
+/// </summary>
 public class SpeciaMarkFormatter(ITextFormatter TextFormatter,
                                  string RemoveStr,
                                  StringComparison _tringComparison = StringComparison.Ordinal) : ITextFormatter

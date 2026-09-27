@@ -1,5 +1,11 @@
 namespace Controller;
 
+/// <summary>
+/// dong hui
+/// 2026-09-27 12:37
+/// 初版
+/// 工作控制器
+/// </summary>
 public class ConWorker(ILogger<ConWorker> Logger,
                        IOptionsMonitor<ConEntity> ConPar,
                        IHostEnvironment Env,

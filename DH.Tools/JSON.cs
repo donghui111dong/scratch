@@ -3,7 +3,7 @@
 /// <summary>
 /// Authors  : DH
 /// Datetime : 2026-09-03 10:30
-/// Describe : JSON Utility
+/// Describe : JSON 工具
 /// </summary>
 public sealed class JSON
 {

@@ -1,5 +1,11 @@
 namespace Controller.ExLogComp;
 
+/// <summary>
+/// dong hui
+/// 2026-09-27 11:24
+/// 初版
+/// 扩展日志记录器
+/// </summary>
 public class LogTextFormatter(string DefaultTemp,
                               string SpecialTemp,
                               Func<LogEvent, bool> MatchCon) : ITextFormatter

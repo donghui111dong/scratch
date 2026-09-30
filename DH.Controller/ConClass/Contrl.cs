@@ -12,42 +12,48 @@ public class Contrl(ILogger<Contrl> Logger,
 {
     public async Task Startup(AssemblyEntity AssemblyObj, CancellationToken StoppingToken)
     {
-        if (Logger.IsEnabled(LogLevel.Information)) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTime.Now:HH:mm:ss.fff}", "主控制器已启动.");
+        if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", "主控制器已启动.");
 
         bool PingStatus = await CheckNetworkStatus.GetNetStatus(ConPar.CurrentValue.Comm.LocalIP, Logger, StoppingToken);
 
-        if (Logger.IsEnabled(LogLevel.Information)) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTime.Now:HH:mm:ss.fff}", $"网络状态检测正常: {ConPar.CurrentValue.Comm.LocalIP} {PingStatus}");
+        if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"网络状态检测正常: {ConPar.CurrentValue.Comm.LocalIP} {PingStatus}");
 
         NetworkStatusObserver.Startup(Logger, Config, ConPar, StoppingToken);
 
-        while (!StoppingToken.IsCancellationRequested)
+        while (StoppingToken.IsCancellationRequested is not true)
         {
             try
             {
-                //if (Logger.IsEnabled(LogLevel.Information)) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTime.Now:HH:mm:ss.fff}", $"{ConPar.CurrentValue.Comm.ToString()}");
+                if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"{ConPar.CurrentValue.Comm.ToString()}");
 
                 await Task.Delay(500, StoppingToken);
             }
             catch (Exception e)
             {
-                if (!StoppingToken.IsCancellationRequested)
+                if (StoppingToken.IsCancellationRequested is not true)
                 {
-                    if (Logger.IsEnabled(LogLevel.Error)) Logger.LogError("LogTick:{Tick}   {Msg}", $"{DateTime.Now:HH:mm:ss.fff}", e);
+                    if (Logger.IsEnabled(LogLevel.Error) is true) Logger.LogError("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", e);
                 }
             }
         }
-
-        if (Logger.IsEnabled(LogLevel.Information)) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTime.Now:HH:mm:ss.fff}", "主控制器已停止!!!");
     }
 
     public async Task Shutdown(CancellationToken StoppingToken)
     {
         NetworkStatusObserver.Shutdown(Logger, StoppingToken);
 
+        if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", "主控制器已停止!");
+
         await Task.CompletedTask;
     }
 }
 
+// <summary>
+/// dong hui
+/// 2026-10-01 00:13
+/// 初版
+/// 网络检测
+/// </summary>
 file class CheckNetworkStatus()
 {
     public static async ValueTask<bool> GetNetStatus(string LocalIP, ILogger<Contrl> Logger, CancellationToken StoppingToken)
@@ -60,7 +66,7 @@ file class CheckNetworkStatus()
 
         PingReply PingCheckerResult = default!;
 
-        while (!StoppingToken.IsCancellationRequested)
+        while (StoppingToken.IsCancellationRequested is not true)
         {
             try
             {
@@ -88,7 +94,7 @@ file class CheckNetworkStatus()
             {
                 if (RecordLoginfo is true)
                 {
-                    if (Logger.IsEnabled(LogLevel.Error)) Logger.LogError("LogTick:{Tick}   {Msg}", $"{DateTime.Now:HH:mm:ss.fff}", $"网络异常终止执行!  {LocalIP}  {PingCheckerResult.Status}");
+                    if (Logger.IsEnabled(LogLevel.Error) is true) Logger.LogError("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"网络异常终止执行!  {LocalIP}  {PingCheckerResult.Status}");
 
                     RecordLoginfo = false;
                 }
@@ -101,6 +107,12 @@ file class CheckNetworkStatus()
     }
 }
 
+// <summary>
+/// dong hui
+/// 2026-10-01 00:13
+/// 初版
+/// 网络监视
+/// </summary>
 file class NetworkStatusObserver()
 {
     private const int MaxTimeTickNetChange = 1000;
@@ -142,7 +154,7 @@ file class NetworkStatusObserver()
             {
                 if (NetStoppingToken.IsCancellationRequested is not true)
                 {
-                    if (NetLogger.IsEnabled(LogLevel.Error)) NetLogger.LogError("LogTick:{Tick}   {Msg}", $"{DateTime.Now:HH:mm:ss.fff}", ex);
+                    if (NetLogger.IsEnabled(LogLevel.Error) is true) NetLogger.LogError("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", ex);
                 }
             }
 
@@ -162,7 +174,7 @@ file class NetworkStatusObserver()
             {
                 if (NetStoppingToken.IsCancellationRequested is not true)
                 {
-                    if (NetLogger.IsEnabled(LogLevel.Error)) NetLogger.LogError("LogTick:{Tick}   {Msg}", $"{DateTime.Now:HH:mm:ss.fff}", ex);
+                    if (NetLogger.IsEnabled(LogLevel.Error) is true) NetLogger.LogError("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", ex);
                 }
             }
 
@@ -170,9 +182,9 @@ file class NetworkStatusObserver()
         }
     };
 
-    private static bool? CheckSpecifiedIPExists(IEnumerable<UnicastIPAddressInformation> NetRecord, string IP)
+    private static bool? CheckSpecifiedIPExists(IEnumerable<UnicastIPAddressInformation>? NetRecord, string IP)
     {
-        return NetRecord?.Any(nic => nic.Address.Equals(IP));
+        return NetRecord?.Any(nic => nic.Address.ToString().Trim() == IP.Trim());
     }
 
     private static IEnumerable<UnicastIPAddressInformation> GetAllNetworkInterface()
@@ -214,11 +226,11 @@ file class NetworkStatusObserver()
                 {
                     using (LogContext.PushProperty("Entry", string.Empty))
                     {
-                        if (NetLogger.IsEnabled(LogLevel.Warning)) NetLogger.LogWarning("{Msg}", $"{NetConfig["SpecialSplitChar:SpecialChar"]}");
+                        if (NetLogger.IsEnabled(LogLevel.Warning) is true) NetLogger.LogWarning("{Msg}", $"{NetConfig["SpecialSplitChar:SpecialChar"]}");
 
-                        if (NetLogger.IsEnabled(LogLevel.Warning)) NetLogger.LogWarning("*  触发时刻:{Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}");
+                        if (NetLogger.IsEnabled(LogLevel.Warning) is true) NetLogger.LogWarning("*  触发时刻:{Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}");
 
-                        if (NetLogger.IsEnabled(LogLevel.Warning)) NetLogger.LogWarning("*  {Msg}",
+                        if (NetLogger.IsEnabled(LogLevel.Warning) is true) NetLogger.LogWarning("*  {Msg}",
                                         $@"监测到{NTInfo?.ChangeType switch
                                         {
                                             NetStatusType.IPChanged => " IP信息 ",
@@ -236,7 +248,7 @@ file class NetworkStatusObserver()
 
                         AllNetRecord?.ToList().ForEach(nic => { Str.AppendLine($"*  {nic.Address}  {nic.IPv4Mask}"); });
 
-                        if (NetLogger.IsEnabled(LogLevel.Warning)) NetLogger.LogWarning("{Msg}", $"{Str}");
+                        if (NetLogger.IsEnabled(LogLevel.Warning) is true) NetLogger.LogWarning("{Msg}", $"{Str}");
 
                         Str.Clear();
 
@@ -244,12 +256,12 @@ file class NetworkStatusObserver()
 
                         if (NTInfo?.ChangeType == NetStatusType.NetKeepChanged)
                         {
-                            if (NetLogger.IsEnabled(LogLevel.Warning)) NetLogger.LogWarning("*  {Msg}", $"网口状态: {NTInfo?.NetKeep}");
+                            if (NetLogger.IsEnabled(LogLevel.Warning) is true) NetLogger.LogWarning("*  {Msg}", $"网口状态: {NTInfo?.NetKeep}");
                         }
 
-                        if (CheckSpecifiedIPExists(AllNetRecord = default!, NetPar.CurrentValue.Comm.LocalIP) is not true)
+                        if (CheckSpecifiedIPExists(AllNetRecord, NetPar.CurrentValue.Comm.LocalIP) is not true)
                         {
-                            if (NetLogger.IsEnabled(LogLevel.Warning)) NetLogger.LogWarning("*  {Msg}", $"指定要用的IP不存在: {NetPar.CurrentValue.Comm.LocalIP}");
+                            if (NetLogger.IsEnabled(LogLevel.Warning) is true) NetLogger.LogWarning("*  {Msg}", $"指定要用的IP不存在: {NetPar.CurrentValue.Comm.LocalIP}");
                         }
 
                         if (NetLogger.IsEnabled(LogLevel.Information) is true) NetLogger.LogInformation("{Msg}", NetConfig["SpecialSplitChar:SpecialChar"]);
@@ -261,7 +273,7 @@ file class NetworkStatusObserver()
         {
             if (NetStoppingToken.IsCancellationRequested is not true)
             {
-                if (NetLogger.IsEnabled(LogLevel.Error)) NetLogger.LogError("LogTick:{Tick}   {Msg}", $"{DateTime.Now:HH:mm:ss.fff}", ex);
+                if (NetLogger.IsEnabled(LogLevel.Error) is true) NetLogger.LogError("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", ex);
             }
         }
     }
@@ -283,12 +295,14 @@ file class NetworkStatusObserver()
             NetworkChange.NetworkAvailabilityChanged += NwAvaliHander;
 
             _ = ReadChannelInfo();
+
+            if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", "网络监视已启动.");
         }
         catch (Exception ex)
         {
             if (StoppingToken.IsCancellationRequested is not true)
             {
-                if (Logger.IsEnabled(LogLevel.Error)) Logger.LogError("LogTick:{Tick}   {Msg}", $"{DateTime.Now:HH:mm:ss.fff}", ex);
+                if (Logger.IsEnabled(LogLevel.Error) is true) Logger.LogError("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", ex);
             }
         }
     }
@@ -307,8 +321,10 @@ file class NetworkStatusObserver()
         {
             if (StoppingToken.IsCancellationRequested is not true)
             {
-                if (Logger.IsEnabled(LogLevel.Error)) Logger.LogError("LogTick:{Tick}   {Msg}", $"{DateTime.Now:HH:mm:ss.fff}", ex);
+                if (Logger.IsEnabled(LogLevel.Error) is true) Logger.LogError("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", ex);
             }
         }
+
+        if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", "网络监视已停止!");
     }
 }

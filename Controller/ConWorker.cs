@@ -45,15 +45,15 @@ public class ConWorker(ILogger<ConWorker> Logger,
         }
         catch (Exception e)
         {
-            if (!StoppingToken.IsCancellationRequested)
+            if (StoppingToken.IsCancellationRequested is not true)
             {
-                if (Logger.IsEnabled(LogLevel.Error) is true) Logger.LogError("LogTick:{Tick}   {Msg}", DateTime.Now.ToString("HH:mm:ss.fff"), e);
+                if (Logger.IsEnabled(LogLevel.Error) is true) Logger.LogError("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", e);
             }
         }
 
         AssemblyObj ??= new() { Version = "", Company = "", BuildTime = "" };
 
-        if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", DateTime.Now.ToString("HH:mm:ss.fff"), "开启参数文件变动监测.");
+        if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", "开启参数文件变动监测.");
 
         ConPar.OnChange(NewCon =>
         {
@@ -61,13 +61,13 @@ public class ConWorker(ILogger<ConWorker> Logger,
             {
                 try
                 {
-                    if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", DateTime.Now.ToString("HH:mm:ss.fff"), "监测到参数文件变动!!!");
+                    if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", "监测到参数文件变动!!!");
                 }
                 catch (Exception e)
                 {
-                    if (!StoppingToken.IsCancellationRequested)
+                    if (StoppingToken.IsCancellationRequested is not true)
                     {
-                        if (Logger.IsEnabled(LogLevel.Error) is true) Logger.LogError("LogTick:{Tick}   {Msg}", DateTime.Now.ToString("HH:mm:ss.fff"), e);
+                        if (Logger.IsEnabled(LogLevel.Error) is true) Logger.LogError("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", e);
                     }
                 }
 
@@ -79,7 +79,7 @@ public class ConWorker(ILogger<ConWorker> Logger,
         {
             try
             {
-                if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", DateTime.Now.ToString("HH:mm:ss.fff"), "主机已运行.");
+                if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", "主机已运行.");
 
                 IController IC = Factory.CreateScope().ServiceProvider.GetRequiredService<IController>();
 
@@ -91,13 +91,13 @@ public class ConWorker(ILogger<ConWorker> Logger,
             }
             catch (Exception e)
             {
-                if (!StoppingToken.IsCancellationRequested)
+                if (StoppingToken.IsCancellationRequested is not true)
                 {
-                    if (Logger.IsEnabled(LogLevel.Warning) is true) Logger.LogWarning("LogTick:{Tick}   {Msg}", DateTime.Now.ToString("HH:mm:ss.fff"), e);
+                    if (Logger.IsEnabled(LogLevel.Warning) is true) Logger.LogWarning("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", e);
                 }
             }
         }
 
-        if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", DateTime.Now.ToString("HH:mm:ss.fff"), "主机已停止!");
+        if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", "主机已停止!");
     }
 }

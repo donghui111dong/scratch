@@ -6,9 +6,14 @@ namespace DH.Entity.ConModule;
 /// 初版
 /// 控制参数实体
 /// </summary>
-public class ConEntity
-{
-    public CommEntity Comm { get; set; } = default!;
+public record ConEntity
+(
+    [property:JsonPropertyName("Comm")]
+    CommEntity Comm,
 
-    public List<ControlEntity> Control { get; set; } = default!;
+    [property:JsonPropertyName("Control")]
+    ImmutableList<ControlEntity> Control
+)
+{
+    public ConEntity() : this(default!, []) { }
 }

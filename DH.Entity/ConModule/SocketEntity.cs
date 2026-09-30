@@ -6,9 +6,14 @@ namespace DH.Entity.ConModule;
 /// 初版
 /// 采集板插槽实体
 /// </summary>
-public class SocketEntity
-{
-    public int Socket { get; set; }
+public record SocketEntity
+(
+    [property:JsonPropertyName("Socket")]
+    int Socket,
 
-    public bool IsEnable { get; set; }
+    [property:JsonPropertyName("IsEnable")]
+    bool IsEnable
+)
+{
+    public SocketEntity() : this(0, false) { }
 }

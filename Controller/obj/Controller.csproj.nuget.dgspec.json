@@ -450,6 +450,10 @@
               "target": "Package",
               "version": "[10.0.12, )"
             },
+            "Microsoft.Extensions.ObjectPool": {
+              "target": "Package",
+              "version": "[10.0.12, )"
+            },
             "Microsoft.Extensions.Options": {
               "target": "Package",
               "version": "[10.0.12, )"

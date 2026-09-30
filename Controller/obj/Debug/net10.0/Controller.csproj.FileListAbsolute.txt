@@ -32,6 +32,7 @@
 /Users/breaker/SourceCode/Scratch/Controller/bin/Debug/net10.0/Microsoft.Extensions.Logging.Debug.dll
 /Users/breaker/SourceCode/Scratch/Controller/bin/Debug/net10.0/Microsoft.Extensions.Logging.EventLog.dll
 /Users/breaker/SourceCode/Scratch/Controller/bin/Debug/net10.0/Microsoft.Extensions.Logging.EventSource.dll
+/Users/breaker/SourceCode/Scratch/Controller/bin/Debug/net10.0/Microsoft.Extensions.ObjectPool.dll
 /Users/breaker/SourceCode/Scratch/Controller/bin/Debug/net10.0/Microsoft.Extensions.Options.dll
 /Users/breaker/SourceCode/Scratch/Controller/bin/Debug/net10.0/Microsoft.Extensions.Options.ConfigurationExtensions.dll
 /Users/breaker/SourceCode/Scratch/Controller/bin/Debug/net10.0/Microsoft.Extensions.Primitives.dll

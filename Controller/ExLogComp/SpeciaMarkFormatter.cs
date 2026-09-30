@@ -16,12 +16,28 @@ public class SpeciaMarkFormatter(ITextFormatter TextFormatter,
 
     private readonly StringComparison _StringComparison = _tringComparison;
 
+    private readonly ObjectPool<StringWriter> NewStrWriter = new DefaultObjectPoolProvider().Create<StringWriter>();
+
     public void Format(LogEvent logEvent, TextWriter output)
     {
-        StringWriter NewStr = new();
+        try
+        {
+            StringWriter Newstr = NewStrWriter.Get();
 
-        _ITextFormatter.Format(logEvent, NewStr);
+            Newstr.GetStringBuilder().Clear();
 
-        output.Write(NewStr.ToString().Replace(_RemoveStr, string.Empty, _StringComparison));
+            _ITextFormatter.Format(logEvent, Newstr);
+
+            output.Write(Newstr.ToString().Replace(_RemoveStr, string.Empty, _StringComparison));
+
+            Newstr.GetStringBuilder().Clear();
+
+            NewStrWriter.Return(Newstr);
+
+        }
+        catch (Exception ex)
+        {
+            ex.Message.ToString();
+        }
     }
 }

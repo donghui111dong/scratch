@@ -6,13 +6,20 @@ namespace DH.Entity;
 /// 初版
 /// 版本信息实体
 /// </summary>
-public class AssemblyEntity
+public record AssemblyEntity
+(
+    [property:JsonPropertyName("Version")]
+    string Version,
+
+    [property:JsonPropertyName("BuildTime")]
+    string BuildTime,
+
+    [property:JsonPropertyName("Company")]
+    string Company,
+
+    [property:JsonPropertyName("FrameVersion")]
+    string FrameVersion
+)
 {
-    public string Version { get; set; } = default!;
-
-    public string BuildTime { get; set; } = default!;
-
-    public string Company { get; set; } = default!;
-
-    public string FrameVersion { get; set; } = default!;
+    public AssemblyEntity() : this(string.Empty, string.Empty, string.Empty, string.Empty) { }
 }

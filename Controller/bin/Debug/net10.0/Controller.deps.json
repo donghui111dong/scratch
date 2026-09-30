@@ -383,6 +383,14 @@
           }
         }
       },
+      "Microsoft.Extensions.ObjectPool/10.0.12": {
+        "runtime": {
+          "lib/net10.0/Microsoft.Extensions.ObjectPool.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.1226.42308"
+          }
+        }
+      },
       "Microsoft.Extensions.Options/10.0.12": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.12",
@@ -542,6 +550,7 @@
           "DH.Tools": "1.0.0",
           "Microsoft.Extensions.Configuration": "10.0.12",
           "Microsoft.Extensions.Hosting": "10.0.12",
+          "Microsoft.Extensions.ObjectPool": "10.0.12",
           "Microsoft.Extensions.Options": "10.0.12",
           "Serilog.Extensions.Hosting": "10.0.0",
           "Serilog.Sinks.Async": "2.1.0",
@@ -778,6 +787,13 @@
       "sha512": "sha512-nKpYoiUdBu8fdLwDxj/fjjGn//7/VwRLzujtMq99/pExrswMXOz+80hbB98QxrD8qPt9oWlFpEVrN9OBKOP7RQ==",
       "path": "microsoft.extensions.logging.eventsource/10.0.12",
       "hashPath": "microsoft.extensions.logging.eventsource.10.0.12.nupkg.sha512"
+    },
+    "Microsoft.Extensions.ObjectPool/10.0.12": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-opBULzn9F7ZOL8EoFuqM2QjI6x9AG04DFNdnU2ky/kI4aUzbiXEfuy9jvCuu3D/ieccuDHTlalyC62esPD8wGg==",
+      "path": "microsoft.extensions.objectpool/10.0.12",
+      "hashPath": "microsoft.extensions.objectpool.10.0.12.nupkg.sha512"
     },
     "Microsoft.Extensions.Options/10.0.12": {
       "type": "package",

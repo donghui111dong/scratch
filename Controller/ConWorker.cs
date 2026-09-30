@@ -81,7 +81,11 @@ public class ConWorker(ILogger<ConWorker> Logger,
             {
                 if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", DateTime.Now.ToString("HH:mm:ss.fff"), "主机已运行.");
 
-                await Factory.CreateScope().ServiceProvider.GetRequiredService<IController>().Startup(AssemblyObj, StoppingToken);
+                IController IC = Factory.CreateScope().ServiceProvider.GetRequiredService<IController>();
+
+                await IC.Startup(AssemblyObj, StoppingToken);
+
+                await IC.Shutdown(StoppingToken);
 
                 await Task.Delay(1000 * 10, StoppingToken);
             }

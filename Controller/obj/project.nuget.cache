@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "zA7F8fS0Tes=",
+  "dgSpecHash": "LEDsUiC3XYU=",
   "success": true,
   "projectFilePath": "/Users/breaker/SourceCode/Scratch/Controller/Controller.csproj",
   "expectedPackageFiles": [
@@ -31,6 +31,7 @@
     "/Users/breaker/.nuget/packages/microsoft.extensions.logging.debug/10.0.12/microsoft.extensions.logging.debug.10.0.12.nupkg.sha512",
     "/Users/breaker/.nuget/packages/microsoft.extensions.logging.eventlog/10.0.12/microsoft.extensions.logging.eventlog.10.0.12.nupkg.sha512",
     "/Users/breaker/.nuget/packages/microsoft.extensions.logging.eventsource/10.0.12/microsoft.extensions.logging.eventsource.10.0.12.nupkg.sha512",
+    "/Users/breaker/.nuget/packages/microsoft.extensions.objectpool/10.0.12/microsoft.extensions.objectpool.10.0.12.nupkg.sha512",
     "/Users/breaker/.nuget/packages/microsoft.extensions.options/10.0.12/microsoft.extensions.options.10.0.12.nupkg.sha512",
     "/Users/breaker/.nuget/packages/microsoft.extensions.options.configurationextensions/10.0.12/microsoft.extensions.options.configurationextensions.10.0.12.nupkg.sha512",
     "/Users/breaker/.nuget/packages/microsoft.extensions.primitives/10.0.12/microsoft.extensions.primitives.10.0.12.nupkg.sha512",

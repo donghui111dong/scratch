@@ -6,11 +6,17 @@ namespace DH.Entity.ConModule;
 /// 初版
 /// 硬件参数实体
 /// </summary>
-public class ControlEntity
+public record ControlEntity
+(
+    [property:JsonPropertyName("IP")]
+    string IP,
+
+    [property:JsonPropertyName("IsEnable")]
+    bool IsEnable,
+
+    [property:JsonPropertyName("Sockets")]
+    ImmutableList<SocketEntity> Sockets
+)
 {
-    public string IP { get; set; } = default!;
-
-    public bool IsEnable { get; set; }
-
-    public List<SocketEntity> Sockets { get; set; } = default!;
+    public ControlEntity() : this(string.Empty, false, []) { }
 }

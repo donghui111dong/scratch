@@ -6,17 +6,26 @@ namespace DH.Entity.ConModule;
 /// 初版
 /// 通用参数实体
 /// </summary>
-public class CommEntity
+public record CommEntity
+(
+    [property:JsonPropertyName("LocalIP")]
+    string LocalIP,
+
+    [property:JsonPropertyName("EncoderAdapter")]
+    string EncoderAdapter,
+
+    [property:JsonPropertyName("MaxRetryTimeout")]
+    int MaxRetryTimeout,
+
+    [property:JsonPropertyName("ErasureMemory")]
+    bool ErasureMemory,
+
+    [property:JsonPropertyName("ExecInterval")]
+    int ExecInterval,
+
+    [property:JsonPropertyName("ExecTimeout")]
+    int ExecTimeout
+)
 {
-    public string LocalIP { get; set; } = default!;
-
-    public string EncoderAdapter { get; set; } = default!;
-
-    public int MaxRetryTimeout { get; set; }
-
-    public bool ErasureMemory { get; set; }
-
-    public int ExecInterval { get; set; }
-
-    public int ExecTimeout { get; set; }
+    public CommEntity() : this(string.Empty, string.Empty, 0, false, 0, 0) { }
 }

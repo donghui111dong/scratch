@@ -732,6 +732,16 @@
           }
         }
       },
+      "DH.ControlProtocol/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "compile": {
+          "bin/placeholder/DH.ControlProtocol.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/DH.ControlProtocol.dll": {}
+        }
+      },
       "DH.Entity/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
@@ -1867,6 +1877,11 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "DH.ControlProtocol/1.0.0": {
+      "type": "project",
+      "path": "../DH.ControlProtocol/DH.ControlProtocol.csproj",
+      "msbuildProject": "../DH.ControlProtocol/DH.ControlProtocol.csproj"
+    },
     "DH.Entity/1.0.0": {
       "type": "project",
       "path": "../DH.Entity/DH.Entity.csproj",
@@ -1885,6 +1900,7 @@
   },
   "projectFileDependencyGroups": {
     "net10.0": [
+      "DH.ControlProtocol >= 1.0.0",
       "DH.Entity >= 1.0.0",
       "DH.Events >= 1.0.0",
       "DH.Tools >= 1.0.0",
@@ -1924,6 +1940,9 @@
           "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
+            "/Users/breaker/SourceCode/Scratch/DH.ControlProtocol/DH.ControlProtocol.csproj": {
+              "projectPath": "/Users/breaker/SourceCode/Scratch/DH.ControlProtocol/DH.ControlProtocol.csproj"
+            },
             "/Users/breaker/SourceCode/Scratch/DH.Entity/DH.Entity.csproj": {
               "projectPath": "/Users/breaker/SourceCode/Scratch/DH.Entity/DH.Entity.csproj"
             },

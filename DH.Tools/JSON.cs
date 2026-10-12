@@ -88,4 +88,33 @@ public sealed class JSON
             return default!;
         }
     }
+
+    public static string BytesToHexStr(Span<byte> SpanBytes)
+    {
+        if (SpanBytes.IsEmpty)
+        {
+            return string.Empty;
+        }
+        else
+        {
+            return string.Create(SpanBytes.Length * 2 + (SpanBytes.Length > 0 ? SpanBytes.Length - 1 : 0),
+            SpanBytes,
+            (Dtion, SpanSource) =>
+            {
+                int DIndex = 0;
+
+                for (int i = 0; i < SpanSource.Length; i++)
+                {
+                    if (i > 0)
+                    {
+                        Dtion[DIndex++] = ' ';
+                    }
+
+                    SpanSource[i].ToString("X2").AsSpan().CopyTo(Dtion.Slice(DIndex, 2));
+
+                    DIndex += 2;
+                }
+            });
+        }
+    }
 }

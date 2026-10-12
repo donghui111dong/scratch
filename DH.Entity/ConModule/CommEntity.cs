@@ -24,8 +24,11 @@ public record CommEntity
     int ExecInterval,
 
     [property:JsonPropertyName("ExecTimeout")]
-    int ExecTimeout
+    int ExecTimeout,
+
+    [property:JsonPropertyName("BSPort")]
+    int BSPort
 )
 {
-    public CommEntity() : this(string.Empty, string.Empty, 0, false, 0, 0) { }
+    public CommEntity() : this(string.Empty, string.Empty, 0, false, 0, 0, 20013) { }
 }

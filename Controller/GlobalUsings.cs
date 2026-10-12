@@ -23,3 +23,6 @@ global using Serilog.Extensions.Hosting;
 global using Microsoft.Extensions.Hosting.Systemd;
 global using Controller.ExLogComp;
 global using Microsoft.Extensions.ObjectPool;
+global using DH.ControlProtocol;
+global using DH.ControlProtocol.ProtocolClass;
+global using System.Buffers;

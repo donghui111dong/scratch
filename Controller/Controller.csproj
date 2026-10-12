@@ -15,6 +15,7 @@
     <ProjectReference Include="..\DH.Events\DH.Events.csproj" />
     <ProjectReference Include="..\DH.Entity\DH.Entity.csproj" />
     <ProjectReference Include="..\DH.Controller\DH.Controller.csproj" />
+    <ProjectReference Include="..\DH.ControlProtocol\DH.ControlProtocol.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="appsettings.Development.json">

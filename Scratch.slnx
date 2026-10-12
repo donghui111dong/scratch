@@ -1,6 +1,7 @@
 <Solution>
   <Project Path="Controller/Controller.csproj" />
   <Project Path="DH.Controller/DH.Controller.csproj" />
+  <Project Path="DH.ControlProtocol/DH.ControlProtocol.csproj" />
   <Project Path="DH.Entity/DH.Entity.csproj" />
   <Project Path="DH.Events/DH.Events.csproj" />
   <Folder Name="/Analysis/" />

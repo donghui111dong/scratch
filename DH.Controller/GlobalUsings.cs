@@ -18,3 +18,6 @@ global using Microsoft.Extensions.ObjectPool;
 global using System.Threading.Channels;
 global using System.Threading.Tasks;
 global using DH.Entity.EventModule;
+global using DH.ControlProtocol;
+global using System.Buffers.Text;
+global using DH.ControlProtocol.ProtocolClass;

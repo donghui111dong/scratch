@@ -8,8 +8,14 @@ namespace DH.Controller.ConClass;
 /// </summary>
 public class Contrl(ILogger<Contrl> Logger,
                     IConfiguration Config,
-                    IOptionsMonitor<ConEntity> ConPar) : IController
+                    IProtocol IProto,
+                    BSReceiver BSrec,
+                    IOptionsMonitor<ConEntity> ConPar,
+                    ChannelReader<PacketBytesForBsr> ChaReader
+                    ) : IController
 {
+    private readonly ArrayPool<byte> PacketPool = ArrayPool<byte>.Shared;
+
     public async Task Startup(AssemblyEntity AssemblyObj, CancellationToken StoppingToken)
     {
         if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", "主控制器已启动.");
@@ -20,21 +26,70 @@ public class Contrl(ILogger<Contrl> Logger,
 
         NetworkStatusObserver.Startup(Logger, Config, ConPar, StoppingToken);
 
-        while (StoppingToken.IsCancellationRequested is not true)
-        {
-            try
-            {
-                if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"{ConPar.CurrentValue.Comm.ToString()}");
+        ValueTask BSTask = BSrec.Startup(StoppingToken);
 
-                await Task.Delay(500, StoppingToken);
-            }
-            catch (Exception e)
+        try
+        {
+            while (StoppingToken.IsCancellationRequested is not true && await ChaReader.WaitToReadAsync(StoppingToken))
             {
-                if (StoppingToken.IsCancellationRequested is not true)
+                try
                 {
-                    if (Logger.IsEnabled(LogLevel.Error) is true) Logger.LogError("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", e);
+                    if (ChaReader.TryRead(out PacketBytesForBsr? PacketBytes) is true && PacketBytes is not null)
+                    {
+                        ReadOnlySpan<string> BsrInfo = AnalysisBsrInfo(in PacketBytes, StoppingToken);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (StoppingToken.IsCancellationRequested is not true)
+                    {
+                        if (Logger.IsEnabled(LogLevel.Error) is true) Logger.LogError("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"{ex.Message}");
+                    }
                 }
             }
+        }
+        catch (Exception exx)
+        {
+            if (StoppingToken.IsCancellationRequested is not true)
+            {
+                if (Logger.IsEnabled(LogLevel.Error) is true) Logger.LogError("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"{exx.Message}");
+            }
+        }
+
+
+
+
+
+        // while (StoppingToken.IsCancellationRequested is not true)
+        // {
+        //     try
+        //     {
+        //         // byte[] OrderPacket = PacketPool.Rent(12);
+
+        //         // Span<byte> temp = OrderPacket.AsSpan(0, 12);
+
+        //         // IProto.BuildWorkStatusPacket(temp, (byte)CommandType.WorkStatus);
+
+        //         //if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"{ConPar.CurrentValue.Comm.ToString()}");
+
+        //         await Task.Delay(500, StoppingToken);
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         if (StoppingToken.IsCancellationRequested is not true)
+        //         {
+        //             if (Logger.IsEnabled(LogLevel.Error) is true) Logger.LogError("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", e);
+        //         }
+        //     }
+        // }
+
+        try
+        {
+            await BSTask;
+        }
+        catch (OperationCanceledException oce)
+        {
+            oce.Message.ToString();
         }
     }
 
@@ -42,9 +97,57 @@ public class Contrl(ILogger<Contrl> Logger,
     {
         NetworkStatusObserver.Shutdown(Logger, StoppingToken);
 
+        BSrec?.Shutdown();
+
         if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", "主控制器已停止!");
 
-        await Task.CompletedTask;
+        try
+        {
+            await Task.CompletedTask;
+        }
+        catch (OperationCanceledException oce)
+        {
+            oce.Message.ToString();
+        }
+    }
+
+    private ReadOnlySpan<string> AnalysisBsrInfo(in PacketBytesForBsr BsrPacketBytes, CancellationToken StoppingToken)
+    {
+        Span<string> StrList = default!;
+
+        try
+        {
+            ReadOnlySpan<byte> MemorySpan = BsrPacketBytes.MemoryOwner.Memory.Span[..BsrPacketBytes.Message.ReceivedBytes];
+
+            char[] CharPool = ArrayPool<char>.Shared.Rent(Encoding.UTF8.GetCharCount(MemorySpan));
+
+            Encoding.UTF8.GetChars(MemorySpan, CharPool.AsSpan()[..MemorySpan.Length]);
+
+            string AnaStr = new(CharPool.AsSpan()[..MemorySpan.Length]);
+
+            if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"接收到原始信号数据:{AnaStr}");
+
+            StrList = AnaStr.Split(';', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).AsSpan();
+
+            StrList[1] = StrList[1][5..];
+
+            StrList[2] = StrList[2][7..];
+
+            StrList[3] = StrList[3][4..];
+        }
+        catch (Exception ex)
+        {
+            if (StoppingToken.IsCancellationRequested is not true)
+            {
+                if (Logger.IsEnabled(LogLevel.Error) is true) Logger.LogError("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", ex);
+            }
+        }
+        finally
+        {
+            BsrPacketBytes?.MemoryOwner?.Dispose();
+        }
+
+        return StrList;
     }
 }
 

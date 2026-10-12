@@ -1,3 +1,5 @@
+using System.Threading.Channels;
+
 namespace Controller;
 
 /// <summary>
@@ -94,7 +96,22 @@ public class Program
 
         #region 服务注册
 
+        Channel<PacketBytesForBsr> BSRChannel = Channel.CreateBounded<PacketBytesForBsr>(new BoundedChannelOptions(4)
+        {
+            FullMode = BoundedChannelFullMode.DropOldest,
+            SingleReader = false,
+            SingleWriter = false
+        });
+
+        Builder.Services.AddSingleton(BSRChannel.Writer);
+
+        Builder.Services.AddSingleton(BSRChannel.Reader);
+
         Builder.Services.AddScoped<IController, Contrl>();
+
+        Builder.Services.AddScoped<IProtocol, ProtocolTool>();
+
+        Builder.Services.AddScoped<BSReceiver>();
 
         Builder.Services.AddHostedService<ConWorker>();
 

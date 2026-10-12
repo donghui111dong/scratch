@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v10.0": {
       "DH.Controller/1.0.0": {
         "dependencies": {
+          "DH.ControlProtocol": "1.0.0",
           "DH.Entity": "1.0.0",
           "DH.Events": "1.0.0",
           "DH.Tools": "1.0.0",
@@ -490,6 +491,14 @@
           }
         }
       },
+      "DH.ControlProtocol/1.0.0": {
+        "runtime": {
+          "DH.ControlProtocol.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "DH.Entity/1.0.0": {
         "runtime": {
           "DH.Entity.dll": {
@@ -776,6 +785,11 @@
       "sha512": "sha512-sOZM+VyRj1pg/ItlHsvrSbjws6oGqZveTzTNBGZ9ziwRDyKsOF3ub6vhvOdxotCIqtlnyHAIwP5sLNvgiZC+pQ==",
       "path": "system.diagnostics.eventlog/10.0.12",
       "hashPath": "system.diagnostics.eventlog.10.0.12.nupkg.sha512"
+    },
+    "DH.ControlProtocol/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     },
     "DH.Entity/1.0.0": {
       "type": "project",

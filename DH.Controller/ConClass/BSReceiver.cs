@@ -2,7 +2,7 @@ namespace DH.Controller.ConClass;
 
 public class BSReceiver(ILogger<Contrl> Logger,
                         IOptionsMonitor<ConEntity> ConPar,
-                        ChannelWriter<PacketBytesForBsr> ChnWriter)
+                        [FromKeyedServices("BSRWriter")] ChannelWriter<PacketBytesForBsr> ChnWriter)
 {
     private Socket? SocketObj;
 
@@ -18,40 +18,51 @@ public class BSReceiver(ILogger<Contrl> Logger,
 
     private readonly EndPoint RemotePointObj = new IPEndPoint(IPAddress.Any, 0);
 
-    private readonly Channel<ReadOnlyMemory<byte>> DataChannel = Channel.CreateBounded<ReadOnlyMemory<byte>>
-    (
-        new BoundedChannelOptions(4)
-        {
-            SingleReader = true,
-            SingleWriter = true,
-            FullMode = BoundedChannelFullMode.DropOldest
-        }
-    );
-
     public async ValueTask Startup(CancellationToken ExternalToken)
     {
-        LinkTokenSource = CancellationTokenSource.CreateLinkedTokenSource(ExternalToken, InnerToken.Token);
+        try
 
-        LocalPointObj = new IPEndPoint(IPAddress.Any, ConPar.CurrentValue.Comm.BSPort);
-
-        SocketObj = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp)
         {
-            ReceiveBufferSize = ReceiveBufferLength,
-            EnableBroadcast = true,
-            ExclusiveAddressUse = false
-        };
+            LinkTokenSource = CancellationTokenSource.CreateLinkedTokenSource(ExternalToken, InnerToken.Token);
 
-        SocketObj.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            LocalPointObj = new IPEndPoint(IPAddress.Any, ConPar.CurrentValue.Comm.BSPort);
 
-        SocketObj.Bind(LocalPointObj);
+            SocketObj = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp)
+            {
+                ReceiveBufferSize = ReceiveBufferLength,
+                EnableBroadcast = true,
+                ExclusiveAddressUse = false
+            };
 
-        ValueTask RLTask = ReceviceLoop(LinkTokenSource.Token);
+            SocketObj.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
 
-        ValueTask RKTask = ValueTask.CompletedTask;//ReceviceLoop(LinkTokenSource.Token);
+            SocketObj.Bind(LocalPointObj);
 
-        if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"信号接收已启动，监听地址：{(LocalPointObj as IPEndPoint)!.Address}:{(LocalPointObj as IPEndPoint)!.Port}");
+            ValueTask RLTask = ReceviceLoop(LinkTokenSource.Token);
 
-        await Task.WhenAll(RLTask.AsTask(), RKTask.AsTask());
+            ValueTask RKTask = ValueTask.CompletedTask;
+
+            if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"信号接收已启动，监听地址：{(LocalPointObj as IPEndPoint)!.Address}:{(LocalPointObj as IPEndPoint)!.Port}");
+
+            try
+            {
+                await Task.WhenAll(RLTask.AsTask(), RKTask.AsTask());
+            }
+            catch (Exception ex)
+            {
+                if (ExternalToken.IsCancellationRequested is not true)
+                {
+                    if (Logger.IsEnabled(LogLevel.Error) is true) Logger.LogError("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"{ex.Message}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            if (ExternalToken.IsCancellationRequested is not true)
+            {
+                if (Logger.IsEnabled(LogLevel.Error) is true) Logger.LogError("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"{ex.Message}");
+            }
+        }
     }
 
     public void Shutdown()
@@ -114,16 +125,13 @@ public class BSReceiver(ILogger<Contrl> Logger,
         {
             if (StopReGCForThisRegionBlock is true)
             {
-                if (StopReGCForThisRegionBlock is true)
+                try
                 {
-                    try
-                    {
-                        GC.EndNoGCRegion();
-                    }
-                    catch (InvalidOperationException exx)
-                    {
-                        exx.Message.ToString();
-                    }
+                    GC.EndNoGCRegion();
+                }
+                catch (InvalidOperationException ex)
+                {
+                    ex.Message.ToString();
                 }
             }
 

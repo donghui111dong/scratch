@@ -10,10 +10,15 @@ public class Contrl(ILogger<Contrl> Logger,
                     IConfiguration Config,
                     IProtocol IProto,
                     BSReceiver BSrec,
+                    IConBoardFactory ICBoardFactory,
                     IOptionsMonitor<ConEntity> ConPar,
-                    ChannelReader<PacketBytesForBsr> ChaReader
+                    [FromKeyedServices("BSRReader")] ChannelReader<PacketBytesForBsr> ChaReader
                     ) : IController
 {
+    private string LastSignal = "0";
+
+    private readonly List<IConBoard> IConBoardList = [];
+
     private readonly ArrayPool<byte> PacketPool = ArrayPool<byte>.Shared;
 
     public async Task Startup(AssemblyEntity AssemblyObj, CancellationToken StoppingToken)
@@ -30,6 +35,18 @@ public class Contrl(ILogger<Contrl> Logger,
 
         try
         {
+            await RunConBoardStatus(StoppingToken);
+        }
+        catch (Exception ex)
+        {
+            if (StoppingToken.IsCancellationRequested is not true)
+            {
+                if (Logger.IsEnabled(LogLevel.Error) is true) Logger.LogError("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"{ex.Message}");
+            }
+        }
+
+        try
+        {
             while (StoppingToken.IsCancellationRequested is not true && await ChaReader.WaitToReadAsync(StoppingToken))
             {
                 try
@@ -38,7 +55,15 @@ public class Contrl(ILogger<Contrl> Logger,
                     {
                         ReadOnlySpan<string> BsrInfo = AnalysisBsrInfo(in PacketBytes, StoppingToken);
 
-                        string a = "";
+                        if (BsrInfo.IsEmpty is not true)
+                        {
+                            _ = BsrInfo[2] switch
+                            {
+                                "1" => LastSignal is not "1" ? SignalAction(BsrInfo[2]) : default,
+                                "0" => LastSignal is not "0" ? SignalAction(BsrInfo[2]) : default,
+                                _ => default
+                            };
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -58,33 +83,6 @@ public class Contrl(ILogger<Contrl> Logger,
             }
         }
 
-
-
-
-
-        // while (StoppingToken.IsCancellationRequested is not true)
-        // {
-        //     try
-        //     {
-        //         // byte[] OrderPacket = PacketPool.Rent(12);
-
-        //         // Span<byte> temp = OrderPacket.AsSpan(0, 12);
-
-        //         // IProto.BuildWorkStatusPacket(temp, (byte)CommandType.WorkStatus);
-
-        //         //if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"{ConPar.CurrentValue.Comm.ToString()}");
-
-        //         await Task.Delay(500, StoppingToken);
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         if (StoppingToken.IsCancellationRequested is not true)
-        //         {
-        //             if (Logger.IsEnabled(LogLevel.Error) is true) Logger.LogError("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", e);
-        //         }
-        //     }
-        // }
-
         try
         {
             await BSTask;
@@ -101,7 +99,19 @@ public class Contrl(ILogger<Contrl> Logger,
 
         BSrec?.Shutdown();
 
-        if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", "主控制器已停止!");
+        foreach (IConBoard item in IConBoardList)
+        {
+            try
+            {
+                item?.ShutDown();
+            }
+            catch (Exception ex)
+            {
+                ex.Message.ToString();
+            }
+        }
+
+        IConBoardList?.Clear();
 
         try
         {
@@ -111,6 +121,8 @@ public class Contrl(ILogger<Contrl> Logger,
         {
             oce.Message.ToString();
         }
+
+        if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", "主控制器已停止!");
     }
 
     private ReadOnlySpan<string> AnalysisBsrInfo(in PacketBytesForBsr BsrPacketBytes, CancellationToken StoppingToken)
@@ -129,13 +141,23 @@ public class Contrl(ILogger<Contrl> Logger,
 
             if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"接收到原始信号数据:{AnaStr}");
 
-            StrList = AnaStr.Split(';', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).AsSpan();
+            if (AnaStr.Contains("BEGIN", StringComparison.OrdinalIgnoreCase) is true && AnaStr.Contains("END", StringComparison.OrdinalIgnoreCase) is true)
+            {
+                StrList = AnaStr.Split(';', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).AsSpan();
 
-            StrList[1] = StrList[1][5..];
+                StrList[1] = StrList[1][5..];
 
-            StrList[2] = StrList[2][7..];
+                StrList[2] = StrList[2][7..];
 
-            StrList[3] = StrList[3][4..];
+                if (StrList.Length >= 5)
+                {
+                    StrList[3] = StrList[3][4..];
+                }
+            }
+            else
+            {
+                if (Logger.IsEnabled(LogLevel.Warning) is true) Logger.LogWarning("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"接收到未知原始信号数据,已丢弃!");
+            }
         }
         catch (Exception ex)
         {
@@ -150,6 +172,70 @@ public class Contrl(ILogger<Contrl> Logger,
         }
 
         return StrList;
+    }
+
+    private string SignalAction(string CurrentSignal)
+    {
+        LastSignal = CurrentSignal;
+
+        // byte[] RentOrderPacket = PacketPool.Rent(12);
+
+        // Span<byte> OrderPacket = RentOrderPacket.AsSpan(0, 12);
+
+        // IProto.BuildWorkStatusPacket(OrderPacket, (byte)CommandType.WorkStatus);
+
+        // PacketPool.Return(RentOrderPacket);
+
+        return default!;
+    }
+
+    private async Task RunConBoardStatus(CancellationToken StoppingToken)
+    {
+        if (ConPar.CurrentValue is not null && ConPar.CurrentValue.Control is not null && ConPar.CurrentValue.Control.Count > 0)
+        {
+            await Parallel.ForEachAsync(ConPar.CurrentValue.Control,
+                                        new ParallelOptions()
+                                        {
+                                            MaxDegreeOfParallelism = ConPar.CurrentValue.Control.Count,
+                                            CancellationToken = StoppingToken
+                                        },
+                                        async (Control, StoppingToken) =>
+                                        {
+                                            try
+                                            {
+                                                if (Control.IsEnable)
+                                                {
+                                                    IConBoard ICB = ICBoardFactory.CreateIConBoard(Control);
+
+                                                    ICB?.Startup(StoppingToken);
+
+                                                    IConBoardList.Add(ICB!);
+                                                }
+                                                else
+                                                {
+                                                    if (StoppingToken.IsCancellationRequested is not true)
+                                                    {
+                                                        if (Logger.IsEnabled(LogLevel.Warning) is true) Logger.LogWarning("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"{Control.IP} 被禁用!");
+                                                    }
+                                                }
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                if (StoppingToken.IsCancellationRequested is not true)
+                                                {
+                                                    if (Logger.IsEnabled(LogLevel.Error) is true) Logger.LogError("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", ex);
+                                                }
+                                            }
+                                        }
+                                  );
+        }
+        else
+        {
+            if (StoppingToken.IsCancellationRequested is not true)
+            {
+                if (Logger.IsEnabled(LogLevel.Error) is true) Logger.LogError("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", "控制参数为空或异常,无法初始化采集板控制对象!");
+            }
+        }
     }
 }
 

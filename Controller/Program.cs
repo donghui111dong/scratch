@@ -1,4 +1,5 @@
 using System.Threading.Channels;
+using DH.Controller.IconFactory;
 
 namespace Controller;
 
@@ -103,9 +104,11 @@ public class Program
             SingleWriter = false
         });
 
-        Builder.Services.AddSingleton(BSRChannel.Writer);
+        Builder.Services.AddKeyedSingleton("BSRWriter", BSRChannel.Writer);
 
-        Builder.Services.AddSingleton(BSRChannel.Reader);
+        Builder.Services.AddKeyedSingleton("BSRReader", BSRChannel.Reader);
+
+        Builder.Services.AddScoped<IConBoardFactory, ConBoardFactory>();
 
         Builder.Services.AddScoped<IController, Contrl>();
 

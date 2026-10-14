@@ -12,7 +12,7 @@ public record ConEntity
     CommEntity Comm,
 
     [property:JsonPropertyName("Control")]
-    ImmutableList<ControlEntity> Control
+    List<ControlEntity> Control
 )
 {
     public ConEntity() : this(default!, []) { }

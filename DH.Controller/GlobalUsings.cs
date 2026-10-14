@@ -20,4 +20,8 @@ global using System.Threading.Tasks;
 global using DH.Entity.EventModule;
 global using DH.ControlProtocol;
 global using System.Buffers.Text;
+global using Microsoft.Extensions.DependencyInjection;
 global using DH.ControlProtocol.ProtocolClass;
+global using DH.Controller.ConClass;
+global using System.Collections.Immutable;
+global using DH.Controller.IconFactory;

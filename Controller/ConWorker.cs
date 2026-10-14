@@ -83,9 +83,23 @@ public class ConWorker(ILogger<ConWorker> Logger,
 
                 IController IC = Factory.CreateScope().ServiceProvider.GetRequiredService<IController>();
 
-                await IC.Startup(AssemblyObj, StoppingToken);
+                try
+                {
+                    await IC.Startup(AssemblyObj, StoppingToken);
+                }
+                catch (Exception ex)
+                {
+                    ex.Message.ToString();
+                }
 
-                await IC.Shutdown(StoppingToken);
+                try
+                {
+                    await IC.Shutdown(StoppingToken);
+                }
+                catch (Exception ex)
+                {
+                    ex.Message.ToString();
+                }
 
                 await Task.Delay(1000 * 10, StoppingToken);
             }

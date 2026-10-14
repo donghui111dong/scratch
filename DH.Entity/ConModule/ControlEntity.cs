@@ -15,7 +15,7 @@ public record ControlEntity
     bool IsEnable,
 
     [property:JsonPropertyName("Sockets")]
-    ImmutableList<SocketEntity> Sockets
+    List<SocketEntity> Sockets
 )
 {
     public ControlEntity() : this(string.Empty, false, []) { }

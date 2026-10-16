@@ -55,9 +55,7 @@ public sealed class JSON
     {
         string AssemboyBuildTime = default!;
 
-        Assembly? AInfo = default!;
-
-        AInfo = Assembly.GetEntryAssembly();
+        Assembly? AInfo = Assembly.GetEntryAssembly();
 
         if (!string.IsNullOrEmpty(AssemblyPath))
         {

@@ -26,3 +26,5 @@ global using Microsoft.Extensions.ObjectPool;
 global using DH.ControlProtocol;
 global using DH.ControlProtocol.ProtocolClass;
 global using System.Buffers;
+global using DH.Events;
+global using DH.Events.Command;

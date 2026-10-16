@@ -46,7 +46,7 @@ public class BSReceiver(ILogger<Contrl> Logger,
 
             try
             {
-                await Task.WhenAll(RLTask.AsTask(), RKTask.AsTask());
+                await Task.WhenAll(RLTask.AsTask(), RKTask.AsTask()).ConfigureAwait(ConfigureAwaitOptions.None);
             }
             catch (Exception ex)
             {
@@ -100,13 +100,13 @@ public class BSReceiver(ILogger<Contrl> Logger,
             {
                 CurrentReceiveBytes = BufferPool.Rent(ReceiveBufferLength);
 
-                SocketReceiveMessageFromResult Message = await SocketObj!.ReceiveMessageFromAsync(CurrentReceiveBytes.Memory, SocketFlags.None, RemotePointObj, StopCancellationToken);
+                SocketReceiveMessageFromResult Message = await SocketObj!.ReceiveMessageFromAsync(CurrentReceiveBytes.Memory, SocketFlags.None, RemotePointObj, StopCancellationToken).ConfigureAwait(false);
 
-                if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"接收到元数据->网口序号:{Message.PacketInformation.Interface} 信息来源:{Message.RemoteEndPoint} 数据长度:{Message.ReceivedBytes}");
+                if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"接收到网口元数据->网口序号:{Message.PacketInformation.Interface} 信息来源:{Message.RemoteEndPoint} 数据长度:{Message.ReceivedBytes}");
 
                 try
                 {
-                    await ChnWriter.WriteAsync(new PacketBytesForBsr() { MemoryOwner = CurrentReceiveBytes, Message = Message }, StopCancellationToken);
+                    await ChnWriter.WriteAsync(new PacketBytesForBsr() { MemoryOwner = CurrentReceiveBytes, Message = Message }, StopCancellationToken).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {

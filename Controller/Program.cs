@@ -100,13 +100,15 @@ public class Program
         Channel<PacketBytesForBsr> BSRChannel = Channel.CreateBounded<PacketBytesForBsr>(new BoundedChannelOptions(4)
         {
             FullMode = BoundedChannelFullMode.DropOldest,
-            SingleReader = false,
+            SingleReader = true,
             SingleWriter = false
         });
 
         Builder.Services.AddKeyedSingleton("BSRWriter", BSRChannel.Writer);
 
         Builder.Services.AddKeyedSingleton("BSRReader", BSRChannel.Reader);
+
+        Builder.Services.AddScoped<ICommandPublisher, CommandPublisher>();
 
         Builder.Services.AddScoped<IConBoardFactory, ConBoardFactory>();
 

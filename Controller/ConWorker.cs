@@ -85,7 +85,7 @@ public class ConWorker(ILogger<ConWorker> Logger,
 
                 try
                 {
-                    await IC.Startup(AssemblyObj, StoppingToken);
+                    await IC.Startup(AssemblyObj, StoppingToken).ConfigureAwait(ConfigureAwaitOptions.None);
                 }
                 catch (Exception ex)
                 {
@@ -94,14 +94,14 @@ public class ConWorker(ILogger<ConWorker> Logger,
 
                 try
                 {
-                    await IC.Shutdown(StoppingToken);
+                    await IC.Shutdown(StoppingToken).ConfigureAwait(ConfigureAwaitOptions.None); ;
                 }
                 catch (Exception ex)
                 {
                     ex.Message.ToString();
                 }
 
-                await Task.Delay(1000 * 10, StoppingToken);
+                await Task.Delay(1000 * 10, StoppingToken).ConfigureAwait(ConfigureAwaitOptions.None); ;
             }
             catch (Exception e)
             {

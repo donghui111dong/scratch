@@ -12,6 +12,7 @@ public class Contrl(ILogger<Contrl> Logger,
                     BSReceiver BSrec,
                     IConBoardFactory ICBoardFactory,
                     IOptionsMonitor<ConEntity> ConPar,
+                    ICommandPublisher ComPublisher,
                     [FromKeyedServices("BSRReader")] ChannelReader<PacketBytesForBsr> ChaReader
                     ) : IController
 {
@@ -25,7 +26,7 @@ public class Contrl(ILogger<Contrl> Logger,
     {
         if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", "主控制器已启动.");
 
-        bool PingStatus = await CheckNetworkStatus.GetNetStatus(ConPar.CurrentValue.Comm.LocalIP, Logger, StoppingToken);
+        bool PingStatus = await CheckNetworkStatus.GetNetStatus(ConPar.CurrentValue.Comm.LocalIP, Logger, StoppingToken).ConfigureAwait(false);
 
         if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"网络状态检测正常: {ConPar.CurrentValue.Comm.LocalIP} {PingStatus}");
 
@@ -35,7 +36,7 @@ public class Contrl(ILogger<Contrl> Logger,
 
         try
         {
-            await RunConBoardStatus(StoppingToken);
+            await BuildConHD(StoppingToken).ConfigureAwait(ConfigureAwaitOptions.None);
         }
         catch (Exception ex)
         {
@@ -47,7 +48,7 @@ public class Contrl(ILogger<Contrl> Logger,
 
         try
         {
-            while (StoppingToken.IsCancellationRequested is not true && await ChaReader.WaitToReadAsync(StoppingToken))
+            while (StoppingToken.IsCancellationRequested is not true && await ChaReader.WaitToReadAsync(StoppingToken).ConfigureAwait(false))
             {
                 try
                 {
@@ -59,8 +60,8 @@ public class Contrl(ILogger<Contrl> Logger,
                         {
                             _ = BsrInfo[2] switch
                             {
-                                "1" => LastSignal is not "1" ? SignalAction(BsrInfo[2]) : default,
-                                "0" => LastSignal is not "0" ? SignalAction(BsrInfo[2]) : default,
+                                "1" => LastSignal is not "1" ? SignalAction(BsrInfo[2], StoppingToken) : default,
+                                "0" => LastSignal is not "0" ? SignalAction(BsrInfo[2], StoppingToken) : default,
                                 _ => default
                             };
                         }
@@ -85,11 +86,20 @@ public class Contrl(ILogger<Contrl> Logger,
 
         try
         {
-            await BSTask;
+            await BSTask.ConfigureAwait(false);
         }
         catch (OperationCanceledException oce)
         {
             oce.Message.ToString();
+        }
+
+        try
+        {
+            //await Task.WhenAll(HDRunTask);
+        }
+        catch (Exception ex)
+        {
+            ex.Message.ToString();
         }
     }
 
@@ -115,7 +125,7 @@ public class Contrl(ILogger<Contrl> Logger,
 
         try
         {
-            await Task.CompletedTask;
+            await Task.CompletedTask.ConfigureAwait(ConfigureAwaitOptions.None);
         }
         catch (OperationCanceledException oce)
         {
@@ -139,7 +149,7 @@ public class Contrl(ILogger<Contrl> Logger,
 
             string AnaStr = new(CharPool.AsSpan()[..MemorySpan.Length]);
 
-            if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"接收到原始信号数据:{AnaStr}");
+            if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"网口原始信号数据:{AnaStr}");
 
             if (AnaStr.Contains("BEGIN", StringComparison.OrdinalIgnoreCase) is true && AnaStr.Contains("END", StringComparison.OrdinalIgnoreCase) is true)
             {
@@ -174,60 +184,121 @@ public class Contrl(ILogger<Contrl> Logger,
         return StrList;
     }
 
-    private string SignalAction(string CurrentSignal)
+    private async Task<string> SignalAction(string CurrentSignal, CancellationToken StoppingToken)
     {
         LastSignal = CurrentSignal;
 
-        // byte[] RentOrderPacket = PacketPool.Rent(12);
+        List<Task> ExecCommandTaskList = [];
 
-        // Span<byte> OrderPacket = RentOrderPacket.AsSpan(0, 12);
+        ReadOnlyMemory<CommandType> CTypeMem = new([
+                                                        CommandType.StartHD,
+                                                        CommandType.WorkStatus,
+                                                        CommandType.StopHD,
+                                                        CommandType.WorkStatus,
+                                                        CommandType.ReadData,
+                                                        CommandType.ExceOver
+                                                    ]);
 
-        // IProto.BuildWorkStatusPacket(OrderPacket, (byte)CommandType.WorkStatus);
+        if (CurrentSignal == "1")
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                try
+                {
+                    ExecCommandTaskList.Add(ComPublisher.CommandAsync(new(CTypeMem.Span[i]), StoppingToken));
 
-        // PacketPool.Return(RentOrderPacket);
+                    if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"已写入指令用通道 -> command:{CTypeMem.Span[i]}");
+                }
+                catch (Exception ex)
+                {
+                    if (Logger.IsEnabled(LogLevel.Error) is true) Logger.LogError("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"{ex.Message}");
+                }
+            }
+        }
+        else if (CurrentSignal == "0")
+        {
+            for (int i = 2; i < CTypeMem.Length; i++)
+            {
+                ExecCommandTaskList.Add(ComPublisher.CommandAsync(new(CTypeMem.Span[i]), StoppingToken));
+
+                if (Logger.IsEnabled(LogLevel.Information) is true) Logger.LogInformation("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"已写入指令用通道 -> command:{CTypeMem.Span[i]}");
+            }
+        }
+
+        try
+        {
+            await Task.WhenAll(ExecCommandTaskList).ConfigureAwait(ConfigureAwaitOptions.None);
+        }
+        catch (Exception ex)
+        {
+            if (StoppingToken.IsCancellationRequested is not true)
+            {
+                if (Logger.IsEnabled(LogLevel.Warning) is true) Logger.LogWarning("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"{ex.Message}");
+            }
+        }
 
         return default!;
     }
 
-    private async Task RunConBoardStatus(CancellationToken StoppingToken)
+    private async Task BuildConHD(CancellationToken StoppingToken)
     {
         if (ConPar.CurrentValue is not null && ConPar.CurrentValue.Control is not null && ConPar.CurrentValue.Control.Count > 0)
         {
-            await Parallel.ForEachAsync(ConPar.CurrentValue.Control,
-                                        new ParallelOptions()
-                                        {
-                                            MaxDegreeOfParallelism = ConPar.CurrentValue.Control.Count,
-                                            CancellationToken = StoppingToken
-                                        },
-                                        async (Control, StoppingToken) =>
-                                        {
-                                            try
+            try
+            {
+                await Parallel.ForEachAsync(ConPar.CurrentValue.Control,
+                                            new ParallelOptions()
                                             {
-                                                if (Control.IsEnable)
+                                                MaxDegreeOfParallelism = ConPar.CurrentValue.Control.Count,
+                                                CancellationToken = StoppingToken
+                                            },
+                                            async (Control, StoppingToken) =>
+                                            {
+                                                try
                                                 {
-                                                    IConBoard ICB = ICBoardFactory.CreateIConBoard(Control);
+                                                    if (Control.IsEnable)
+                                                    {
+                                                        IConBoard ICB = ICBoardFactory.CreateIConBoard(ConPar.CurrentValue.Comm, Control);
 
-                                                    ICB?.Startup(StoppingToken);
+                                                        try
+                                                        {
+                                                            await ICB.InitHD(StoppingToken).ConfigureAwait(false);
+                                                        }
+                                                        catch (Exception ex)
+                                                        {
+                                                            if (StoppingToken.IsCancellationRequested is not true)
+                                                            {
+                                                                if (Logger.IsEnabled(LogLevel.Warning) is true) Logger.LogWarning("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"{ex.Message}");
+                                                            }
+                                                        }
 
-                                                    IConBoardList.Add(ICB!);
+                                                        IConBoardList.Add(ICB!);
+                                                    }
+                                                    else
+                                                    {
+                                                        if (StoppingToken.IsCancellationRequested is not true)
+                                                        {
+                                                            if (Logger.IsEnabled(LogLevel.Warning) is true) Logger.LogWarning("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"{Control.IP} 被禁用!");
+                                                        }
+                                                    }
                                                 }
-                                                else
+                                                catch (Exception ex)
                                                 {
                                                     if (StoppingToken.IsCancellationRequested is not true)
                                                     {
-                                                        if (Logger.IsEnabled(LogLevel.Warning) is true) Logger.LogWarning("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", $"{Control.IP} 被禁用!");
+                                                        if (Logger.IsEnabled(LogLevel.Error) is true) Logger.LogError("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", ex);
                                                     }
                                                 }
                                             }
-                                            catch (Exception ex)
-                                            {
-                                                if (StoppingToken.IsCancellationRequested is not true)
-                                                {
-                                                    if (Logger.IsEnabled(LogLevel.Error) is true) Logger.LogError("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", ex);
-                                                }
-                                            }
-                                        }
-                                  );
+                                      ).ConfigureAwait(ConfigureAwaitOptions.None);
+            }
+            catch (Exception ex)
+            {
+                if (StoppingToken.IsCancellationRequested is not true)
+                {
+                    if (Logger.IsEnabled(LogLevel.Error) is true) Logger.LogError("LogTick:{Tick}   {Msg}", $"{DateTimeOffset.Now:HH:mm:ss.fff}", ex);
+                }
+            }
         }
         else
         {
@@ -261,7 +332,7 @@ file class CheckNetworkStatus()
         {
             try
             {
-                PingCheckerResult = await NetPingChecker.SendPingAsync(IPAddress.Parse(LocalIP), TimeSpan.FromMilliseconds(2000), null, null, StoppingToken);
+                PingCheckerResult = await NetPingChecker.SendPingAsync(IPAddress.Parse(LocalIP), TimeSpan.FromMilliseconds(2000), null, null, StoppingToken).ConfigureAwait(ConfigureAwaitOptions.None);
 
                 NetStatus = PingCheckerResult.Status == IPStatus.Success;
             }
@@ -290,7 +361,7 @@ file class CheckNetworkStatus()
                     RecordLoginfo = false;
                 }
 
-                await Task.Delay(1000, StoppingToken);
+                await Task.Delay(1000, StoppingToken).ConfigureAwait(ConfigureAwaitOptions.None);
             }
         }
 
@@ -339,7 +410,7 @@ file class NetworkStatusObserver()
         {
             try
             {
-                await NetChannel.Writer.WriteAsync(new NetStatusEvent(NetStatusType.IPChanged), NetStoppingToken);
+                await NetChannel.Writer.WriteAsync(new NetStatusEvent(NetStatusType.IPChanged), NetStoppingToken).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -359,7 +430,7 @@ file class NetworkStatusObserver()
         {
             try
             {
-                await NetChannel.Writer.WriteAsync(new NetStatusEvent(NetStatusType.NetKeepChanged, e.IsAvailable), NetStoppingToken);
+                await NetChannel.Writer.WriteAsync(new NetStatusEvent(NetStatusType.NetKeepChanged, e.IsAvailable), NetStoppingToken).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -411,7 +482,7 @@ file class NetworkStatusObserver()
     {
         try
         {
-            while (await NetChannel.Reader.WaitToReadAsync(NetStoppingToken))
+            while (await NetChannel.Reader.WaitToReadAsync(NetStoppingToken).ConfigureAwait(false))
             {
                 if (NetChannel.Reader.TryRead(out NetStatusEvent? NTInfo) is true && NTInfo is not null)
                 {

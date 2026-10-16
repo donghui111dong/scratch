@@ -2,5 +2,5 @@ namespace DH.Controller.IconFactory;
 
 public interface IConBoardFactory
 {
-    IConBoard CreateIConBoard(ControlEntity ControlPar);
+    IConBoard CreateIConBoard(CommEntity CommPar, ControlEntity ControlPar);
 }

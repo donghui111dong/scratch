@@ -25,3 +25,5 @@ global using DH.ControlProtocol.ProtocolClass;
 global using DH.Controller.ConClass;
 global using System.Collections.Immutable;
 global using DH.Controller.IconFactory;
+global using DH.Events;
+global using DH.Events.Command;

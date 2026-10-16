@@ -2,7 +2,7 @@ namespace DH.Controller;
 
 public interface IConBoard
 {
-    void Startup(CancellationToken cancellationToken);
+    ValueTask InitHD(CancellationToken cancellationToken);
 
     void ShutDown();
 }
